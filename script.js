@@ -1,6 +1,6 @@
 (function () {
   /* |START| GLOBAL VARS |START| */
-  const CHROME_CAPTION_ITEM_CLASS = "TBMuR bj4p3b";
+  const CHROME_CAPTION_ITEM_CLASS = "TBMuR bj4p3b"; // Captions wrapper
   const RAPID_API_KEY = "7bb3e31dfdmsh12714da22204ab5p1c7980jsn340e18243a50";
   const TARGET_LANG = "ru";
   const SOURCE_LANG = "en";
