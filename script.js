@@ -26,28 +26,22 @@
   }
 
   async function updateTranslationAreaItem($node, q) {
-    const url =
-      "https://google-translate1.p.rapidapi.com/language/translate/v2";
+    const url = `https://translated-mymemory---translation-memory.p.rapidapi.com/get?langpair=${SOURCE_LANG}%7C${TARGET_LANG}&q=${q}&mt=1&onlyprivate=0&de=a%40b.c`;
     const options = {
-      method: "POST",
+      method: "GET",
       headers: {
-        "content-type": "application/x-www-form-urlencoded",
-        "Accept-Encoding": "application/gzip",
         "X-RapidAPI-Key": RAPID_API_KEY,
-        "X-RapidAPI-Host": "google-translate1.p.rapidapi.com",
+        "X-RapidAPI-Host":
+          "translated-mymemory---translation-memory.p.rapidapi.com",
       },
-      body: new URLSearchParams({
-        q,
-        target: TARGET_LANG,
-        source: SOURCE_LANG,
-      }),
     };
 
     try {
       const response = await fetch(url, options);
       const result = await response.text();
-      const resultParse = JSON.parse(result);
-      $node.innerText = resultParse?.data?.translations[0].translatedText;
+      const parsedData = JSON.parse(result);
+
+      $node.innerText = parsedData?.responseData?.translatedText;
     } catch (error) {
       console.error(error);
     }
@@ -57,7 +51,10 @@
     const $translationArea = document.createElement("div");
     $translationArea.className = "trslt-area";
 
-    const throttledApiCall = throttle(updateTranslationAreaItem, API_CALL_DEBOUNCE_TIME);
+    const throttledApiCall = throttle(
+      updateTranslationAreaItem,
+      API_CALL_DEBOUNCE_TIME
+    );
 
     const translationAreaStyles = {
       position: "absolute",
@@ -99,7 +96,9 @@
           trsltArea.append(newItemDiv);
 
           // Create observer for text-content updating check (Only google meet feature)
-          const speakerTextObserver = new MutationObserver(function (mutations) {
+          const speakerTextObserver = new MutationObserver(function (
+            mutations
+          ) {
             mutations.forEach(function (mutation) {
               const $trsltItem = document.getElementById(uniqIdItem);
               const content = mutation.target.offsetParent.innerText;
@@ -110,7 +109,10 @@
               }
             });
           });
-          speakerTextObserver.observe($textContent, { childList: true, subtree: true });
+          speakerTextObserver.observe($textContent, {
+            childList: true,
+            subtree: true,
+          });
         });
       });
     });
